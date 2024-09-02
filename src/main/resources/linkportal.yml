@@ -1,0 +1,8 @@
+default_nether: world_nether
+default_end: world_the_end
+
+portal_nether_links:
+#  - YourSuperWorldName:TheWorldDestination
+
+portal_end_links:
+#  - YourSuperWorldName:TheWorldDestination
