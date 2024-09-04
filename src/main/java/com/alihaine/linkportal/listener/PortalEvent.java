@@ -13,6 +13,11 @@ public class PortalEvent implements Listener {
     @EventHandler
     public void onPortalEvent(PlayerPortalEvent event) {
         World worldDestination = linkPortalFile.getWorldDestination(event.getCause(), event.getFrom().getWorld());
+        if (worldDestination == null) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("There is no destination to go.");
+            return;
+        }
         Location destination;
         Location tmpDest = generateLocationDestination(event.getFrom().clone(), worldDestination);
         try {
@@ -20,7 +25,6 @@ public class PortalEvent implements Listener {
             TravelAgent travelAgent = event.getPortalTravelAgent();
             destination = travelAgent.findOrCreate(tmpDest);
         } catch (ClassNotFoundException exception) {
-            Bukkit.getConsoleSender().sendMessage("TravelAgent not available");
             destination = tmpDest;
         }
         if (destination.getWorld().getEnvironment().equals(World.Environment.THE_END))
@@ -50,10 +54,8 @@ public class PortalEvent implements Listener {
     private void checkEndPlatform(Location cloneLocation) {
         cloneLocation.setY(cloneLocation.getY() - 1);
 
-        if (!cloneLocation.getBlock().getType().equals(Material.OBSIDIAN)) {
-            Bukkit.getConsoleSender().sendMessage("NO PLATFORM");
+        if (!cloneLocation.getBlock().getType().equals(Material.OBSIDIAN))
             generateEndPlatform(cloneLocation);
-        }
     }
 
     private void generateEndPlatform(Location location) {
