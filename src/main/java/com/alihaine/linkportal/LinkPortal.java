@@ -14,7 +14,6 @@ public class LinkPortal extends BulMultiverseAddon {
     @Override
     public void onEnable() {
         linkPortal = this;
-
         linkPortalFile = new LinkPortalFile();
 
         BulMultiverse.getBulMultiverseInstance().getServer().getPluginManager().registerEvents(new PortalEvent(), BulMultiverse.getBulMultiverseInstance());

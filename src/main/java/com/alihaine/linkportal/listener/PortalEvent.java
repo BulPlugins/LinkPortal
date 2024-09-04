@@ -2,6 +2,7 @@ package com.alihaine.linkportal.listener;
 
 import com.alihaine.linkportal.LinkPortal;
 import com.alihaine.linkportal.file.LinkPortalFile;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -15,9 +16,16 @@ public class PortalEvent implements Listener {
     @EventHandler
     public void onPortalEvent(PlayerPortalEvent event) {
         World worldDestination = linkPortalFile.getWorldDestination(event.getCause(), event.getFrom().getWorld());
-        TravelAgent travelAgent = event.getPortalTravelAgent();
+        Location destination;
         Location tmpDest = generateLocationDestination(event.getFrom().clone(), worldDestination);
-        Location destination = travelAgent.findOrCreate(tmpDest);
+        try {
+            Class.forName("org.bukkit.TravelAgent");
+            TravelAgent travelAgent = event.getPortalTravelAgent();
+            destination = travelAgent.findOrCreate(tmpDest);
+        } catch (ClassNotFoundException exception) {
+            Bukkit.getConsoleSender().sendMessage("TravelAgent not available");
+            destination = tmpDest;
+        }
         event.setTo(destination);
         event.getPlayer().sendMessage("You have been teleported to the world: " + worldDestination.getName());
     }
@@ -37,6 +45,11 @@ public class PortalEvent implements Listener {
     }
 
     private double getScaling(World.Environment environment) {
-        return environment.equals(World.Environment.NETHER) ? 8 : 0.125;
+        return environment.equals(World.Environment.NETHER) ? 0.125 : 8;
+    }
+
+    private Location generateLocationDestinationWithoutAgent(Location fromLocationClone, World worldDestination) {
+        fromLocationClone.setWorld(worldDestination);
+        return fromLocationClone;
     }
 }
