@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LinkPortalFile {
@@ -45,27 +46,15 @@ public class LinkPortalFile {
         this.defaultEnd = Bukkit.getWorld(this.portalLinkConfig.getString("default_end"));
         this.defaultWorld = Bukkit.getWorld(this.portalLinkConfig.getString("default_world"));
 
-        this.portalLinkConfig.getList("portal_nether_links").forEach((line) -> {
-            String[] lineSplit = line.toString().split(":");
-            if (lineSplit.length < 2) {
-                Bukkit.getConsoleSender().sendMessage("Error for the line : " + line + " use the syntax WorldFrom:WorldDest");
-                return;
-            }
-            World worldFrom = Bukkit.getWorld(lineSplit[0]);
-            if (worldFrom == null) {
-                Bukkit.getConsoleSender().sendMessage("Error the world: " + lineSplit[0] + " don't exist");
-                return;
-            }
-            World worldDest = Bukkit.getWorld(lineSplit[1]);
-            if (worldDest == null) {
-                Bukkit.getConsoleSender().sendMessage("Error the world: " + lineSplit[0] + " don't exist");
-                return;
-            }
-            this.netherWorldsDestination.put(worldFrom, worldDest);
-            Bukkit.getConsoleSender().sendMessage("New link created " + worldFrom.getName() + " to dest " + worldDest.getName());
-        });
+        fillMapWithWorldsValues(this.netherWorldsDestination, this.portalLinkConfig.getList("portal_nether_links"));
+        fillMapWithWorldsValues(this.endWorldsDestination, this.portalLinkConfig.getList("portal_end_links"));
+    }
 
-        this.portalLinkConfig.getList("portal_end_links").forEach((line) -> {
+    private void fillMapWithWorldsValues(Map<World, World> targetMap, List<?> lines) {
+        if (lines == null || lines.isEmpty())
+            return;
+
+        lines.forEach((line) -> {
             String[] lineSplit = line.toString().split(":");
             if (lineSplit.length < 2) {
                 Bukkit.getConsoleSender().sendMessage("Error for the line : " + line + " use the syntax WorldFrom:WorldDest");
@@ -81,7 +70,7 @@ public class LinkPortalFile {
                 Bukkit.getConsoleSender().sendMessage("Error the world: " + lineSplit[0] + " don't exist");
                 return;
             }
-            this.endWorldsDestination.put(worldFrom, worldDest);
+            targetMap.put(worldFrom, worldDest);
             Bukkit.getConsoleSender().sendMessage("New link created " + worldFrom.getName() + " to dest " + worldDest.getName());
         });
     }
