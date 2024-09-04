@@ -2,13 +2,10 @@ package com.alihaine.linkportal.listener;
 
 import com.alihaine.linkportal.LinkPortal;
 import com.alihaine.linkportal.file.LinkPortalFile;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.TravelAgent;
 
 public class PortalEvent implements Listener {
     private final LinkPortalFile linkPortalFile = LinkPortal.getLinkPortal().getLinkPortalFile();
@@ -26,6 +23,8 @@ public class PortalEvent implements Listener {
             Bukkit.getConsoleSender().sendMessage("TravelAgent not available");
             destination = tmpDest;
         }
+        if (destination.getWorld().getEnvironment().equals(World.Environment.THE_END))
+            checkEndPlatform(destination.clone());
         event.setTo(destination);
         event.getPlayer().sendMessage("You have been teleported to the world: " + worldDestination.getName());
     }
@@ -48,8 +47,24 @@ public class PortalEvent implements Listener {
         return environment.equals(World.Environment.NETHER) ? 0.125 : 8;
     }
 
-    private Location generateLocationDestinationWithoutAgent(Location fromLocationClone, World worldDestination) {
-        fromLocationClone.setWorld(worldDestination);
-        return fromLocationClone;
+    private void checkEndPlatform(Location cloneLocation) {
+        cloneLocation.setY(cloneLocation.getY() - 1);
+
+        if (!cloneLocation.getBlock().getType().equals(Material.OBSIDIAN)) {
+            Bukkit.getConsoleSender().sendMessage("NO PLATFORM");
+            generateEndPlatform(cloneLocation);
+        }
+    }
+
+    private void generateEndPlatform(Location location) {
+        location.getBlock().setType(Material.OBSIDIAN);
+        int x = 97;
+        while (x++ < 102) {
+            int z = -4;
+            while (z++ < 1) {
+                Location loc = new Location(location.getWorld(), x, 48, z);
+                loc.getBlock().setType(Material.OBSIDIAN);
+            }
+        }
     }
 }
