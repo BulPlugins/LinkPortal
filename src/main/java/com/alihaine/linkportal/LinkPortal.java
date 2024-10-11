@@ -14,11 +14,15 @@ public class LinkPortal extends BulMultiverseAddon {
     @Override
     public void onEnable() {
         linkPortal = this;
+
+        Bukkit.getConsoleSender().sendMessage("§e[BulMultiverse] §aEnable the addon LinkPortal");
+    }
+
+    @Override
+    public void onEnableAfterWorldsLoad() {
         linkPortalFile = new LinkPortalFile();
 
         BulMultiverse.getBulMultiverseInstance().getServer().getPluginManager().registerEvents(new PortalEvent(), BulMultiverse.getBulMultiverseInstance());
-
-        Bukkit.getConsoleSender().sendMessage("§e[BulMultiverse] §aEnable the addon LinkPortal");
     }
 
     @Override
