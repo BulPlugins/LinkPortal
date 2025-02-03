@@ -32,7 +32,7 @@
             <artifactId>sample</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/BulMultiverse-0.10.jar</systemPath>
+            <systemPath>${project.basedir}/BulMultiverse-0.13.jar</systemPath>
         </dependency>
     </dependencies>
 

@@ -25,11 +25,7 @@ public class LinkPortalFile {
     private World defaultWorld;
 
     public LinkPortalFile() {
-        try {
-            this.portalLinkFile = linkPortalInstance.createCustomFile("linkportal.yml", getClass().getClassLoader().getResourceAsStream("linkportal.yml"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.portalLinkFile = linkPortalInstance.createCustomFile("linkportal.yml", getClass().getClassLoader().getResourceAsStream("linkportal.yml"));
 
         this.portalLinkConfig = new YamlConfiguration();
         try {

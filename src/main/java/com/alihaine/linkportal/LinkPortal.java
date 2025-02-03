@@ -1,15 +1,21 @@
 package com.alihaine.linkportal;
 
 import com.alihaine.bulmultiverse.BulMultiverse;
-import com.alihaine.bulmultiverse.BulMultiverseAddon;
+import com.alihaine.bulmultiverse.addon.BulMultiverseAddon;
 import com.alihaine.linkportal.file.LinkPortalFile;
 import com.alihaine.linkportal.listener.PortalEvent;
 import org.bukkit.Bukkit;
+
+import java.util.Collections;
 
 public class LinkPortal extends BulMultiverseAddon {
 
     private static LinkPortal linkPortal;
     private LinkPortalFile linkPortalFile;
+
+    public LinkPortal() {
+        super("LinkPortal", Collections.singletonList("AliHaine"), Collections.singletonList("https://www.spigotmc.org/resources/beta-addon-linkportal.119396/"), "https://discord.com/invite/wxnTV68dX2");
+    }
 
     @Override
     public void onEnable() {
@@ -22,7 +28,7 @@ public class LinkPortal extends BulMultiverseAddon {
     public void onEnableAfterWorldsLoad() {
         linkPortalFile = new LinkPortalFile();
 
-        BulMultiverse.getBulMultiverseInstance().getServer().getPluginManager().registerEvents(new PortalEvent(), BulMultiverse.getBulMultiverseInstance());
+        BulMultiverse.getBulMultiverse().getServer().getPluginManager().registerEvents(new PortalEvent(), BulMultiverse.getBulMultiverse());
     }
 
     @Override
